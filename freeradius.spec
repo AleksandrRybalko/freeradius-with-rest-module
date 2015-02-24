@@ -1,7 +1,7 @@
 Summary: High-performance and highly configurable free RADIUS server
 Name: freeradius
 Version: 3.0.4
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+ and LGPLv2+
 Group: System Environment/Daemons
 URL: http://www.freeradius.org/
@@ -204,6 +204,14 @@ BuildRequires: unixODBC-devel
 %description unixODBC
 This plugin provides the unixODBC support for the FreeRADIUS server project.
 
+%package rest
+Summary: REST support for freeradius
+Group: System Environment/Daemons
+Requires: %{name} = %{version}-%{release}
+BuildRequires: libcurl-devel
+
+%description rest
+This plugin provides the REST support for the FreeRADIUS server project.
 
 %prep
 %setup -q -n %{dist_base}
@@ -263,7 +271,6 @@ This plugin provides the unixODBC support for the FreeRADIUS server project.
         --without-rlm_sql_firebird \
         --without-rlm_sql_db2 \
         --without-rlm_sql_oracle \
-        --without-rlm_rest \
         --without-rlm_unbound
 
 make
@@ -517,7 +524,6 @@ exit 0
 %attr(640,root,radiusd) %config(noreplace) /etc/raddb/mods-available/redis
 %attr(640,root,radiusd) %config(noreplace) /etc/raddb/mods-available/rediswho
 %attr(640,root,radiusd) %config(noreplace) /etc/raddb/mods-available/replicate
-%attr(640,root,radiusd) %config(noreplace) /etc/raddb/mods-available/rest
 %attr(640,root,radiusd) %config(noreplace) /etc/raddb/mods-available/smbpasswd
 %attr(640,root,radiusd) %config(noreplace) /etc/raddb/mods-available/smsotp
 %attr(640,root,radiusd) %config(noreplace) /etc/raddb/mods-available/soh
@@ -823,7 +829,14 @@ exit 0
 %files unixODBC
 %{_libdir}/freeradius/rlm_sql_unixodbc.so
 
+%files rest
+%{_libdir}/freeradius/rlm_rest.so
+%attr(640,root,radiusd) %config(noreplace) /etc/raddb/mods-available/rest
+
 %changelog
+* Thu Feb 19 2015 Aleksandr Rybalko <19archangel95@gmail.com> - 3.0.4-5
+- Added rest subpackage
+
 * Fri Feb 13 2015 Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com> - 3.0.4-4
 - Bump release number to catch up with Fedora 21.
 
